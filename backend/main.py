@@ -1443,7 +1443,7 @@ async def update_task_config(form_data: TaskConfigForm, user=Depends(get_admin_u
 @app.post("/api/task/title/completions")
 async def generate_title(form_data: dict, user=Depends(get_verified_user)):
     print("generate_title")
-    log.debug(f"form_data:{form_data}")
+    # log.debug(f"form_data:{form_data}")
 
     model_id = form_data["model"]
     if model_id not in app.state.MODELS:
@@ -1456,7 +1456,8 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
     # If the user has a custom task model, use that model
     model_id = get_task_model_id(model_id)
 
-    log.debug(f"model_id: {model_id}, user: {user}")
+    log.debug(f"model_id: {model_id}")
+    # log.debug(f"user: {user}")
 
     template = app.state.config.TITLE_GENERATION_PROMPT_TEMPLATE
 
@@ -1468,7 +1469,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
             "location": user.info.get("location") if user.info else None,
         },
     )
-    log.debug(f"content: {content}")
+    # log.debug(f"content: {content}")
 
     payload = {
         "model": model_id,
@@ -1489,7 +1490,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
             content={"detail": e.args[1]},
         )
 
-    log.debug(f"payload after filter pipeline: {payload}")
+    # log.debug(f"payload after filter pipeline: {payload}")
 
     if "chat_id" in payload:
         del payload["chat_id"]
