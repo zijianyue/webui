@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { createEventDispatcher, getContext } from 'svelte';
 	const dispatch = createEventDispatcher();
 	const i18n = getContext('i18n');
@@ -7,6 +7,8 @@
 	import AdvancedParams from '../Settings/Advanced/AdvancedParams.svelte';
 	import Valves from '$lib/components/common/Valves.svelte';
 	import FileItem from '$lib/components/common/FileItem.svelte';
+
+	import { user } from '$lib/stores';
 
 	export let models = [];
 
@@ -82,12 +84,14 @@
 
 		<hr class="my-2 border-gray-100 dark:border-gray-800" />
 
-		<div>
-			<div class="mb-1.5 font-medium">{$i18n.t('Advanced Params')}</div>
-
+		{#if $user.role === 'admin'}
 			<div>
-				<AdvancedParams bind:params />
+				<div class="mb-1.5 font-medium">{$i18n.t('Advanced Params')}</div>
+
+				<div>
+					<AdvancedParams bind:params />
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 </div>

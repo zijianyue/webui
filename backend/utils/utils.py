@@ -90,6 +90,7 @@ def get_current_user(
     if token is None:
         raise HTTPException(status_code=403, detail="Not authenticated")
 
+    # print(token)
     # auth by api key
     if token.startswith("sk-"):
         return get_current_user_by_api_key(token)
@@ -104,6 +105,7 @@ def get_current_user(
                 detail=ERROR_MESSAGES.INVALID_TOKEN,
             )
         else:
+            # print(user)
             Users.update_user_last_active_by_id(user.id)
         return user
     else:

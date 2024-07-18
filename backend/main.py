@@ -146,20 +146,16 @@ class SPAStaticFiles(StaticFiles):
 
 print(
     rf"""
-  ___                    __        __   _     _   _ ___ 
- / _ \ _ __   ___ _ __   \ \      / /__| |__ | | | |_ _|
-| | | | '_ \ / _ \ '_ \   \ \ /\ / / _ \ '_ \| | | || | 
-| |_| | |_) |  __/ | | |   \ V  V /  __/ |_) | |_| || | 
- \___/| .__/ \___|_| |_|    \_/\_/ \___|_.__/ \___/|___|
-      |_|                                               
-
-      
-v{VERSION} - building the best open-source AI user interface.
-{f"Commit: {WEBUI_BUILD_HASH}" if WEBUI_BUILD_HASH != "dev-build" else ""}
-https://github.com/open-webui/open-webui
+__        __   _    _  __                       _    ___ 
+\ \      / /__(_)  | |/ /__ _ _ __   __ _      / \  |_ _|
+ \ \ /\ / / _ \ |  | ' // _` | '_ \ / _` |    / _ \  | | 
+  \ V  V /  __/ |  | . \ (_| | | | | (_| |   / ___ \ | | 
+   \_/\_/ \___|_|  |_|\_\__,_|_| |_|\__, |  /_/   \_\___|
+                                    |___/                      
+v{VERSION} - building the best Medical AI.
 """
 )
-
+# {f"Commit: {WEBUI_BUILD_HASH}" if WEBUI_BUILD_HASH != "dev-build" else ""}
 
 def run_migrations():
     try:
@@ -1104,11 +1100,13 @@ async def generate_chat_completions(form_data: dict, user=Depends(get_verified_u
             form_data["metadata"] = {"task": task}
 
     if model.get("pipe"):
+        print("generate_function_chat_completion")
         return await generate_function_chat_completion(form_data, user=user)
     if model["owned_by"] == "ollama":
         print("generate_ollama_chat_completion")
         return await generate_ollama_chat_completion(form_data, user=user)
     else:
+        print("generate_openai_chat_completion")
         return await generate_openai_chat_completion(form_data, user=user)
 
 
@@ -1445,6 +1443,7 @@ async def update_task_config(form_data: TaskConfigForm, user=Depends(get_admin_u
 @app.post("/api/task/title/completions")
 async def generate_title(form_data: dict, user=Depends(get_verified_user)):
     print("generate_title")
+    log.debug(f"form_data:{form_data}")
 
     model_id = form_data["model"]
     if model_id not in app.state.MODELS:
@@ -1457,7 +1456,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
     # If the user has a custom task model, use that model
     model_id = get_task_model_id(model_id)
 
-    print(model_id)
+    log.debug(f"model_id: {model_id}, user: {user}")
 
     template = app.state.config.TITLE_GENERATION_PROMPT_TEMPLATE
 
@@ -1469,6 +1468,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
             "location": user.info.get("location") if user.info else None,
         },
     )
+    log.debug(f"content: {content}")
 
     payload = {
         "model": model_id,
@@ -1479,7 +1479,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
         "task": str(TASKS.TITLE_GENERATION),
     }
 
-    log.debug(payload)
+    log.debug(f"payload: {payload}")
 
     try:
         payload = filter_pipeline(payload, user)
@@ -1489,10 +1489,14 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
             content={"detail": e.args[1]},
         )
 
+    log.debug(f"payload after filter pipeline: {payload}")
+
     if "chat_id" in payload:
         del payload["chat_id"]
 
-    return await generate_chat_completions(form_data=payload, user=user)
+    title_ret = await generate_chat_completions(form_data=payload, user=user)
+    log.debug(f"title_ret: {title_ret}")
+    return title_ret
 
 
 @app.post("/api/task/query/completions")
@@ -2260,7 +2264,7 @@ async def get_manifest_json():
         "display": "standalone",
         "background_color": "#343541",
         "orientation": "portrait-primary",
-        "icons": [{"src": "/static/logo.png", "type": "image/png", "sizes": "500x500"}],
+        "icons": [{"src": "/static/logo.png", "type": "image/png", "sizes": "512x512"}],
     }
 
 

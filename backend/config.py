@@ -78,8 +78,8 @@ for source in log_sources:
 log.setLevel(SRC_LOG_LEVELS["CONFIG"])
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
-if WEBUI_NAME != "Open WebUI":
-    WEBUI_NAME += " (Open WebUI)"
+# if WEBUI_NAME != "Open WebUI":
+#     WEBUI_NAME += " (Open WebUI)"
 
 WEBUI_URL = os.environ.get("WEBUI_URL", "http://localhost:3000")
 
@@ -235,9 +235,10 @@ class PersistentConfig(Generic[T]):
         self.env_value = env_value
         self.config_value = get_config_value(config_path)
         if self.config_value is not None:
-            log.info(f"'{env_name}' loaded from config.json")
+            log.info(f"'{env_name}' loaded from config.json, '{self.config_value}'")
             self.value = self.config_value
         else:
+            log.info(f"init '{env_name}' by env '{env_value}'")
             self.value = env_value
 
     def __str__(self):
@@ -851,7 +852,7 @@ TITLE_GENERATION_PROMPT_TEMPLATE = PersistentConfig(
         """Here is the query:
 {{prompt:middletruncate:8000}}
 
-Create a concise, 3-5 word phrase with an emoji as a title for the previous query. Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting. RESPOND ONLY WITH THE TITLE TEXT.
+Create a concise, 3-5 word phrase with an emoji as a title for the previous query. Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting. RESPOND ONLY WITH THE TITLE TEXT in user's language.
 
 Examples of titles:
 📉 Stock Market Trends
