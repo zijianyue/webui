@@ -44,7 +44,7 @@
 		],
 		"enable_signup": true,
 		"default_user_role": "user",
-		"enable_community_sharing": true,
+		"enable_community_sharing": false,
 		"default_models": "",
 		"user_permissions": {
 			"chat": {
