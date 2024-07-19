@@ -41,7 +41,16 @@
 				"dismissible": false,
 				"timestamp": 1720701738
 			}
-		]
+		],
+		"enable_signup": true,
+		"default_user_role": "user",
+		"enable_community_sharing": true,
+		"default_models": "",
+		"user_permissions": {
+			"chat": {
+				"deletion": true
+			}
+		}
 	},
 	"openai": {
 		"api_base_urls": [
@@ -115,8 +124,8 @@
 	},
 	"task": {
 		"model": {
-			"default": "",
-			"external": ""
+			"default": "qwen2:latest",
+			"external": "qwen2:latest"
 		},
 		"title": {
 			"prompt_template": "Here is the query:\n{{prompt:middletruncate:8000}}\n\nPlease summarize the previous query for a chat topic with an emoji.Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting.\nNo more than 16 characters.\nNo special characters.\nPunctuation mark is banned.\nNot including '.' ':' '?' '!' '\u201c' '*' '<' '>'.\nMust only answer in Chinese, trying not to mix in English.\n\nExamples of titles:\n\ud83d\udcc9 Stock Market Trends\n\ud83c\udf6a Perfect Chocolate Chip Recipe\nEvolution of Music Streaming\nRemote Work Productivity Tips\nArtificial Intelligence in Healthcare\n\ud83c\udfae Video Game Development Insights"
@@ -138,5 +147,20 @@
 		},
 		"size": "512x512",
 		"steps": 50
+	},
+	"webhook_url": "",
+	"auth": {
+		"admin": {
+			"show": true
+		},
+		"jwt_expiry": "-1"
+	},
+	"model_filter": {
+		"enable": true,
+		"list": [
+			"qwen2:0.5b",
+			"qwen2:latest",
+			"glm4:latest"
+		]
 	}
 }

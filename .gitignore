@@ -311,3 +311,5 @@ cypress/screenshots
 /backend/.webui_secret_key
 
 *.pem
+
+static/pyodide/
