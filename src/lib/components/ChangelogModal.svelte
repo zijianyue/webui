@@ -25,7 +25,7 @@
 	<div class="px-5 pt-4 dark:text-gray-300 text-gray-700">
 		<div class="flex justify-between items-start">
 			<div class="text-xl font-semibold">
-				{$i18n.t('What’s New in')}
+				{$i18n.t('Welcome title')}
 				{$WEBUI_NAME}
 				<Confetti x={[-1, -0.25]} y={[0, 0.5]} />
 			</div>
@@ -59,7 +59,9 @@
 
 	<div class=" w-full p-4 px-5 text-gray-700 dark:text-gray-100">
 		<div class=" overflow-y-scroll max-h-80 scrollbar-hidden">
-			<div class="mb-3">
+		  <div class="mb-3">
+				<div class="text-sm dark:text-gray-200">如何将网站安装到桌面,像手机APP一样使用</div>
+				<div class="text-sm dark:text-gray-200">使用协议</div>
 				{#if changelog}
 					{#each Object.keys(changelog) as version}
 						<div class=" mb-3 pr-2">
