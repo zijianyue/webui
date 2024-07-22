@@ -38,7 +38,7 @@
 		"enable_signup": true,
 		"default_user_role": "user",
 		"enable_community_sharing": false,
-		"default_models": "",
+		"default_models": "glm4:latest",
 		"user_permissions": {
 			"chat": {
 				"deletion": true
@@ -151,8 +151,7 @@
 	"model_filter": {
 		"enable": true,
 		"list": [
-			"qwen2:latest",
-			"qwen2:1.5b"
+			"glm4:latest"
 		]
 	}
 }
