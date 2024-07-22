@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, getContext } from 'svelte';
+	import { onMount, createEventDispatcher, getContext } from 'svelte';
 	const dispatch = createEventDispatcher();
 	const i18n = getContext('i18n');
 
@@ -17,8 +17,16 @@
 
 	export let chatFiles = [];
 	export let valves = {};
-	export let params = {};
-	export let saveSettings: Function;
+	export let params = {
+		system: ''
+	};
+	onMount(async () => {
+		if ($settings.system) {
+			params.system = $settings.system;
+		} else if ($prompts.length >= 1) {
+			params.system = $prompts[0].content;
+		}
+	});
 
 	const saveSystemDefaultPrompt= async () => {
 		if (params.system.length === 0) {
