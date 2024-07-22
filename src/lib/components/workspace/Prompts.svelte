@@ -22,7 +22,7 @@
 	let deletePrompt = null;
 
 	// TODO: 待完善,应在系统启动时默认加载
-	// import promptsData from '../../../../prompt-export/prompts-export-1721194306143.json';
+	// import promptsData from '../../../../prompt-export/prompts-export.json';
 	// $: InitPrompts(promptsData);
 
 	// const InitPrompts = async (data) => {

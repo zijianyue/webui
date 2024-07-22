@@ -7,6 +7,9 @@
 	import AdvancedParams from '../Settings/Advanced/AdvancedParams.svelte';
 	import Valves from '$lib/components/common/Valves.svelte';
 	import FileItem from '$lib/components/common/FileItem.svelte';
+	import { prompts, settings } from '$lib/stores';
+	import { toast } from 'svelte-sonner';
+	import { updateUserSettings } from '$lib/apis/users';
 
 	import { user } from '$lib/stores';
 
@@ -15,6 +18,18 @@
 	export let chatFiles = [];
 	export let valves = {};
 	export let params = {};
+	export let saveSettings: Function;
+
+	const saveSystemDefaultPrompt= async () => {
+		if (params.system.length === 0) {
+			toast.error($i18n.t('Choose a prompt before saving...'));
+			return;
+		}
+		settings.set({ ...$settings, system: params.system });
+		await updateUserSettings(localStorage.token, { ui: $settings });
+
+		toast.success($i18n.t('Default prompt updated'));
+	};
 </script>
 
 <div class=" dark:text-white">
@@ -70,8 +85,18 @@
 		{/if}
 
 		<div>
-			<div class="mb-1.5 font-medium">{$i18n.t('System Prompt')}</div>
-
+			<!-- <div class="mb-1.5 font-medium">{$i18n.t('System Prompt')} -->
+			<!-- </div> -->
+			<select
+				class="w-full rounded-lg py-2 px-4 text-sm bg-gray-50 dark:text-gray-300 dark:bg-gray-850 outline-none"
+				bind:value={params.system}
+				placeholder="Select a prompt"
+			>
+				<option value="" selected disabled>{$i18n.t('Select session role')}</option>
+				{#each $prompts as prompt}
+					<option value={prompt.content} class="bg-gray-100 dark:bg-gray-700">{prompt.title}</option>
+				{/each}
+			</select>
 			<div>
 				<textarea
 					bind:value={params.system}
@@ -80,6 +105,12 @@
 					placeholder={$i18n.t('Enter system prompt')}
 				/>
 			</div>
+			<button
+				class="self-center mt-0.5 ml-1 text-[0.7rem] text-gray-500 font-primary"
+				on:click={saveSystemDefaultPrompt}
+			>
+				{$i18n.t('Set as default')}
+			</button>
 		</div>
 
 		<hr class="my-2 border-gray-100 dark:border-gray-800" />
