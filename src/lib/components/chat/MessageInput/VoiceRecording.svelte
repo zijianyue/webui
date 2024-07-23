@@ -173,6 +173,7 @@
 				audioChunks = [];
 			} else {
 				if (confirmed) {
+					console.log('Recording stopped confirmed');
 					const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
 
 					await transcribeHandler(audioBlob);
@@ -256,6 +257,7 @@
 	const confirmRecording = async () => {
 		loading = true;
 		confirmed = true;
+		console.log('confirmRecording');
 
 		if (recording && mediaRecorder) {
 			await mediaRecorder.stop();
