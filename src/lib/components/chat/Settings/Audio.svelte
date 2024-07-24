@@ -11,7 +11,7 @@
 
 	// Audio
 	let conversationMode = false;
-	let speechAutoSend = false;
+	let speechAutoSend = true;
 	let responseAutoPlayback = false;
 	let nonLocalVoices = false;
 

@@ -44,7 +44,7 @@
 
 	let rmsLevel = 0;
 	let hasStartedSpeaking = false;
-	let mediaRecorder;
+	let mediaRecorder = false;
 	let audioChunks = [];
 
 	let videoInputDevices = [];
@@ -183,6 +183,7 @@
 			mediaRecorder = false;
 
 			if (_continue) {
+				console.log('continue startRecording');
 				startRecording();
 			}
 
@@ -302,11 +303,15 @@
 
 				// Start silence detection only after initial speech/noise has been detected
 				if (hasStartedSpeaking) {
-					if (Date.now() - lastSoundTime > 2000) {
+					if (Date.now() - lastSoundTime > 1000) {
 						confirmed = true;
 
 						if (mediaRecorder) {
 							console.log('%c%s', 'color: red; font-size: 20px;', '🔇 Silence detected');
+							if (mediaRecorder) {
+								console.log(`cleanup previous Resources`);
+								mediaRecorder.stream.getTracks().forEach(track => track.stop());
+							}
 							mediaRecorder.stop();
 							return;
 						}
@@ -506,6 +511,15 @@
 			}
 		}
 		console.log(`Audio monitoring and playing stopped for message ID ${id}`);
+	};
+
+	const cleanupResources = async () => {
+		// 停止所有媒体流
+		if (mediaRecorder) {
+			console.log(`cleanupResources`);
+			mediaRecorder.stream.getTracks().forEach(track => track.stop());
+			await stopRecordingCallback(false);
+		}
 	};
 
 	onMount(async () => {
@@ -877,6 +891,7 @@
 						<button
 							class=" p-3 rounded-full bg-gray-50 dark:bg-gray-900"
 							on:click={async () => {
+								await cleanupResources();
 								showCallOverlay.set(false);
 							}}
 							type="button"

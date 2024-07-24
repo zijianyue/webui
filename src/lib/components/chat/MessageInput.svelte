@@ -792,6 +792,7 @@
 
 														if (res) {
 															recording = true;
+															res.getTracks().forEach(track => track.stop());
 														}
 													} catch {
 														toast.error($i18n.t('Permission denied when accessing microphone'));
@@ -838,14 +839,17 @@
 														return;
 													}
 													// check if user has access to getUserMedia
+													let callVoiceStream
 													try {
-														await navigator.mediaDevices.getUserMedia({ audio: true });
+														callVoiceStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 														// If the user grants the permission, proceed to show the call overlay
-
 														showCallOverlay.set(true);
 													} catch (err) {
 														// If the user denies the permission or an error occurs, show an error message
 														toast.error($i18n.t('Permission denied when accessing media devices'));
+													}
+													if (callVoiceStream) {
+														callVoiceStream.getTracks().forEach(track => track.stop());
 													}
 												}}
 											>
