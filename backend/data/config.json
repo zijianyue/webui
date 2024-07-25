@@ -46,7 +46,7 @@
 		"enable_signup": true,
 		"default_user_role": "user",
 		"enable_community_sharing": false,
-		"default_models": "qwen2:7b-instruct-q2_K",
+		"default_models": "qwen2:1.5b",
 		"user_permissions": {
 			"chat": {
 				"deletion": true
@@ -159,7 +159,9 @@
 	"model_filter": {
 		"enable": true,
 		"list": [
-			"qwen2:7b-instruct-q2_K"
+			"yi:6b",
+			"qwen2:1.5b",
+			"qwen2:latest"
 		]
 	}
 }
