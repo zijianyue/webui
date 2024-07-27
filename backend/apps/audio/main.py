@@ -326,7 +326,9 @@ def transcribe(
             headers = {"Authorization": f"Bearer {app.state.config.STT_OPENAI_API_KEY}"}
 
             files = {"file": (filename, open(file_path, "rb"))}
-            data = {"model": app.state.config.STT_MODEL}
+            data = {"model": app.state.config.STT_MODEL,
+                    "language": "zh",
+                    "prompt": "以下是普通话的句子"} # 限制简体中文
 
             print(files, data)
 
@@ -352,7 +354,7 @@ def transcribe(
                 return data
             except Exception as e:
                 log.exception(e)
-                error_detail = "Open WebUI: Server Connection Error"
+                error_detail = "Wei Kang AI: Server Connection Error"
                 if r is not None:
                     try:
                         res = r.json()
