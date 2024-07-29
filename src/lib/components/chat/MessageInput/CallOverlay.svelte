@@ -180,7 +180,7 @@
 			const _audioChunks = audioChunks.slice(0);
 
 			audioChunks = [];
-			mediaRecorder = false;
+			// mediaRecorder = false;
 
 			if (_continue) {
 				console.log('continue startRecording');
@@ -210,7 +210,7 @@
 			}
 		} else {
 			audioChunks = [];
-			mediaRecorder = false;
+			// mediaRecorder = false;
 		}
 	};
 
@@ -308,11 +308,10 @@
 
 						if (mediaRecorder) {
 							console.log('%c%s', 'color: red; font-size: 20px;', '🔇 Silence detected');
-							if (mediaRecorder) {
-								console.log(`cleanup previous Resources`);
-								mediaRecorder.stream.getTracks().forEach(track => track.stop());
-							}
 							mediaRecorder.stop();
+							// console.log(`cleanup previous Resources`);
+							mediaRecorder.stream.getTracks().forEach(track => track.stop());
+							mediaRecorder = null
 							return;
 						}
 					}
@@ -517,8 +516,9 @@
 		// 停止所有媒体流
 		if (mediaRecorder) {
 			console.log(`cleanupResources`);
-			mediaRecorder.stream.getTracks().forEach(track => track.stop());
 			await stopRecordingCallback(false);
+			mediaRecorder.stream.getTracks().forEach(track => track.stop());
+			mediaRecorder = null
 		}
 	};
 
