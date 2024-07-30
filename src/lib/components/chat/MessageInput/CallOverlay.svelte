@@ -515,8 +515,8 @@
 	const cleanupResources = async () => {
 		// 停止所有媒体流
 		if (mediaRecorder) {
-			console.log(`cleanupResources`);
-			await stopRecordingCallback(false);
+			// console.log(`cleanupResources`);
+			stopRecordingCallback(false);
 			mediaRecorder.stream.getTracks().forEach(track => track.stop());
 			mediaRecorder = null
 		}
@@ -891,7 +891,7 @@
 						<button
 							class=" p-3 rounded-full bg-gray-50 dark:bg-gray-900"
 							on:click={async () => {
-								await cleanupResources();
+								cleanupResources();
 								showCallOverlay.set(false);
 							}}
 							type="button"
