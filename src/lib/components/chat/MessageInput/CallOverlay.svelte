@@ -44,7 +44,7 @@
 
 	let rmsLevel = 0;
 	let hasStartedSpeaking = false;
-	let mediaRecorder = false;
+	let mediaRecorder = null;
 	let audioChunks = [];
 
 	let videoInputDevices = [];
@@ -183,7 +183,6 @@
 			// mediaRecorder = false;
 
 			if (_continue) {
-				console.log('continue startRecording');
 				startRecording();
 			}
 

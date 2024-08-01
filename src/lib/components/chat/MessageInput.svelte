@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { onMount, tick, getContext } from 'svelte';
+	import { createEventDispatcher, onMount, tick, getContext } from 'svelte';
 	import {
 		type Model,
 		mobile,
@@ -44,6 +44,7 @@
 	import FilesOverlay from './MessageInput/FilesOverlay.svelte';
 
 	const i18n = getContext('i18n');
+	const dispatch = createEventDispatcher();
 
 	export let transparentBackground = false;
 
@@ -467,7 +468,7 @@
 							await tick();
 							document.getElementById('chat-textarea')?.focus();
 
-							if ($settings?.speechAutoSend ?? false) {
+							if ($settings?.speechAutoSend ?? true) {
 								submitPrompt(prompt);
 							}
 						}}
@@ -578,6 +579,10 @@
 										onClose={async () => {
 											await tick();
 											chatTextAreaElement?.focus();
+										}}
+										{submitPrompt}
+										on:mrStatusChanged={(e) => {
+											dispatch('mrStatusChanged', 'wait model response');
 										}}
 									>
 										<button

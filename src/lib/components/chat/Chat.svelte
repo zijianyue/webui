@@ -52,7 +52,7 @@
 	import { createOpenAITextStream } from '$lib/apis/streaming';
 	import { queryMemory } from '$lib/apis/memories';
 	import { getAndUpdateUserLocation, getUserSettings } from '$lib/apis/users';
-	import { chatCompleted, generateTitle, generateSearchQuery, chatAction } from '$lib/apis';
+	import { chatCompleted, generateTitle, generateSuggestQuestions, generateSearchQuery, chatAction } from '$lib/apis';
 
 	import Banner from '../common/Banner.svelte';
 	import MessageInput from '$lib/components/chat/MessageInput.svelte';
@@ -62,6 +62,8 @@
 	import { error } from '@sveltejs/kit';
 	import ChatControls from './ChatControls.svelte';
 	import EventConfirmDialog from '../common/ConfirmDialog.svelte';
+
+	import { addNewMemory } from '$lib/apis/memories';
 
 	const i18n: Writable<i18nType> = getContext('i18n');
 
@@ -109,6 +111,9 @@
 
 	let params = {};
 	let valves = {};
+
+	let mrToMemory = false;
+	let suggestQuestionsList;
 
 	$: if (history.currentId !== null) {
 		let _messages = [];
@@ -691,6 +696,17 @@
 					}
 					_responses.push(_response);
 
+					if (mrToMemory) {	// 针对生成电子病历的对话请求
+
+						const res = await addNewMemory(localStorage.token, _response).catch((error) => {
+							toast.error(error);
+						});
+						if (res) {
+							toast.success($i18n.t('Memory added successfully'));
+						}
+						mrToMemory = false;
+					}
+
 					if (chatEventEmitter) clearInterval(chatEventEmitter);
 				} else {
 					toast.error($i18n.t(`Model {{modelId}} not found`, { modelId }));
@@ -844,7 +860,7 @@
 
 					for (const line of lines) {
 						if (line !== '') {
-							console.log(line);
+							// console.log(line);
 							let data = JSON.parse(line);
 
 							if ('citations' in data) {
@@ -1001,6 +1017,10 @@
 			await setChatTitle(_chatId, _title);
 		}
 
+		if (messages.length >= 2 && messages.at(-1).done == true) {
+			suggestQuestionsList = await generateChatSuggestQuestions(messages)
+			console.log('suggestQuestionsList:', suggestQuestionsList);
+		}
 		return _response;
 	};
 
@@ -1371,6 +1391,20 @@
 		}
 	};
 
+	const generateChatSuggestQuestions = async (messages) => {
+		const suggestQuestions = await generateSuggestQuestions(
+			localStorage.token,
+			selectedModels[0],
+			messages,
+			$chatId
+		).catch((error) => {
+			console.error(error);
+			return '';
+		});
+
+		return JSON.parse(suggestQuestions);
+	};
+
 	const setChatTitle = async (_chatId, _title) => {
 		if (_chatId === $chatId) {
 			title = _title;
@@ -1592,6 +1626,8 @@
 						{continueGeneration}
 						{regenerateResponse}
 						{chatActionHandler}
+						{submitPrompt}
+						{suggestQuestionsList}
 					/>
 				</div>
 			</div>
@@ -1616,6 +1652,9 @@
 					{messages}
 					{submitPrompt}
 					{stopResponse}
+					on:mrStatusChanged = {(e) => {
+						mrToMemory = (e.detail == 'wait model response');
+					}}
 				/>
 			</div>
 		</div>

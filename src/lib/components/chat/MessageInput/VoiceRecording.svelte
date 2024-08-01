@@ -113,7 +113,7 @@
 					// }
 
 					// if (recording && Date.now() - lastSoundTime > 3000) {
-					// 	if ($settings?.speechAutoSend ?? false) {
+					// 	if ($settings?.speechAutoSend ?? true) {
 					// 		confirmRecording();
 					// 	}
 					// }
@@ -173,7 +173,6 @@
 				audioChunks = [];
 			} else {
 				if (confirmed) {
-					console.log('Recording stopped confirmed');
 					const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
 
 					await transcribeHandler(audioBlob);
@@ -248,7 +247,6 @@
 
 	const stopRecording = async () => {
 		if (recording && mediaRecorder) {
-			console.log('stopRecording');
 			await mediaRecorder.stop();
 			// 停止所有音频轨道
 			mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -264,7 +262,6 @@
 	const confirmRecording = async () => {
 		loading = true;
 		confirmed = true;
-		console.log('confirmRecording');
 
 		if (recording && mediaRecorder) {
 			await mediaRecorder.stop();

@@ -31,6 +31,8 @@
 	export let autoScroll;
 	export let history = {};
 	export let messages = [];
+	export let suggestQuestionsList = [];
+	export let submitPrompt: Function;
 
 	export let selectedModels;
 
@@ -349,6 +351,8 @@
 												history: history
 											});
 										}}
+										{submitPrompt}
+										{suggestQuestionsList}
 									/>
 								{/key}
 							{:else}
