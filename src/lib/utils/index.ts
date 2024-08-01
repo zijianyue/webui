@@ -351,7 +351,7 @@ export const getImportOrigin = (_chats) => {
 	return 'webui';
 };
 
-export const getUserPosition = async (raw = false) => {
+export const getUserPosition = async (raw = false, reverse = false) => {
 	// Get the user's location using the Geolocation API
 	const position = await new Promise((resolve, reject) => {
 		navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -368,8 +368,14 @@ export const getUserPosition = async (raw = false) => {
 	const { latitude, longitude } = position.coords;
 
 	if (raw) {
+		if (reverse) {
+			return { longitude, latitude };
+		}
 		return { latitude, longitude };
 	} else {
+		if (reverse) {
+			return `${longitude.toFixed(6)}, ${latitude.toFixed(6)}`;
+		}
 		return `${latitude.toFixed(3)}, ${longitude.toFixed(3)} (lat, long)`;
 	}
 };
