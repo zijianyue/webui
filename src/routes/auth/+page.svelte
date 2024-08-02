@@ -15,6 +15,7 @@
 	let mode = 'signin';
 
 	let name = '';
+	let cellPhone = '';
 	let email = '';
 	let password = '';
 
@@ -33,16 +34,22 @@
 	};
 
 	const signInHandler = async () => {
-		const sessionUser = await userSignIn(email, password).catch((error) => {
-			toast.error(error);
-			return null;
-		});
+		const sessionUser = await userSignIn(cellPhone, email, password).catch(
+			(error) => {
+				toast.error(error);
+				return null;
+			}
+		);
 
 		await setSessionUser(sessionUser);
 	};
 
 	const signUpHandler = async () => {
-		const sessionUser = await userSignUp(name, email, password, generateInitialsImage(name)).catch(
+		let ckEmail = email;
+		if (ckEmail == '') {
+			ckEmail = 'default@163.com';
+		}
+		const sessionUser = await userSignUp(name, cellPhone, ckEmail, password, generateInitialsImage(name)).catch(
 			(error) => {
 				toast.error(error);
 				return null;
@@ -191,13 +198,13 @@
 							{/if}
 
 							<div class="mb-2">
-								<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Email')}</div>
+								<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Cell-phone number')}</div>
 								<input
-									bind:value={email}
-									type="email"
+									bind:value={cellPhone}
+									type="text"
 									class=" px-5 py-3 rounded-2xl w-full text-sm outline-none border dark:border-none dark:bg-gray-900"
-									autocomplete="email"
-									placeholder={$i18n.t('Enter Your Email')}
+									autocomplete="cellPhone"
+									placeholder={$i18n.t('Enter Your Cell-phone number')}
 									required
 								/>
 							</div>
@@ -212,6 +219,17 @@
 									placeholder={$i18n.t('Enter Your Password')}
 									autocomplete="current-password"
 									required
+								/>
+							</div>
+
+							<div class="mb-2">
+								<div class=" text-sm font-medium text-left mb-1">{$i18n.t('Email')}</div>
+								<input
+									bind:value={email}
+									type="email"
+									class=" px-5 py-3 rounded-2xl w-full text-sm outline-none border dark:border-none dark:bg-gray-900"
+									autocomplete="email"
+									placeholder={$i18n.t('Enter Your Email')}
 								/>
 							</div>
 						</div>
