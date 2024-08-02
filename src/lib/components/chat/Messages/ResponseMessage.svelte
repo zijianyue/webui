@@ -107,28 +107,39 @@
 	async function fetchNearbyPlaces(keyword) {
 		let pointLonlat = await getUserPosition(false ,true).catch((error) => {
 			console.log('get pointLonlat fail:', error.message);
-			toast.error(error.message);
-			// return;
+			toast.error("当前设备无法获取位置信息,建议使用手机或者平板");
+			return;
 		});
+		// let pointLonlat = "114.267150,30.715988" // mock position
 		console.log('pointLonlat:', pointLonlat);
+		let collection = [];
 		hospitals = [];
 		const apiKey = 'ba3509a3a414b4e66d14f7168efe8798';
-		const url = `https://api.tianditu.gov.cn/v2/search?postStr={"keyWord":"${keyword}","level":12,"queryRadius":5000,"pointLonlat":"${pointLonlat}","queryType":3,"start":0,"count":10}&type=query&tk=${apiKey}`;
-		// TODO: 实际不只10个,需要全部取出来
+		let startNum = 0;
+		const countPerPage = 10; // 每页的结果数量
+
 		try {
-			const response = await fetch(url);
-			const data = await response.json();
-			console.log('fetch url ret:', data);
-			if (data.status.infocode === 1000 && data.pois.length > 0) {
-				// let ret = data.pois.map(poi => poi.name);
-				hospitals = [...data.pois];
-			} else {
-				hospitals = ['未找到结果'];
+			while (true) {
+				const url = `https://api.tianditu.gov.cn/v2/search?postStr={"keyWord":"${keyword}","level":12,"queryRadius":5000,"pointLonlat":"${pointLonlat}","queryType":3,"start":${startNum},"count":${countPerPage}}&type=query&tk=${apiKey}`;
+				const response = await fetch(url);
+				const data = await response.json();
+				console.log('fetch url ret:', data);
+				if (data.status.infocode === 1000 && data.count > 0) {
+					// let ret = data.pois.map(poi => poi.name);
+					// hospitals = [...data.pois];
+					collection.push(...data.pois);
+				} else {
+					break; // 停止循环，没有更多结果
+				}
+				startNum += countPerPage;
 			}
-		} catch (error) {
-			console.error('获取数据时出错:', error);
-			hospitals = ['获取数据时出错'];
 		}
+		catch (error) {
+			console.error('获取数据时出错:', error);
+			collection.push('获取数据时出错');
+		}
+		hospitals = [...collection];
+		console.log('所有医院数据:', hospitals);
 	}
 
 	// Open all links in a new tab/window (from https://github.com/markedjs/marked/issues/655#issuecomment-383226346)
@@ -1125,10 +1136,10 @@
 											{suggestQuestion}
 										</button>
 									{/each}
-									{#if suggestQuestionsList.some(question => ["医", "治", "疗"].some(keyword => question.includes(keyword)))}
+									{#if suggestQuestionsList.some(question => ["医", "治", "疗", "疼", "痛", "诊"].some(keyword => question.includes(keyword)))}
 										<button
 											class="visible p-1.5 hover:bg-purple-600 dark:hover:bg-purple-800 rounded-lg dark:hover:text-white hover:text-white transition regenerate-response-button border border-purple-300 dark:border-purple-600 bg-purple-200 dark:bg-purple-700 text-purple-900 dark:text-purple-300"
-											style="flex: 0 1 auto; min-width: 50px; margin: 5px; margin-left: 20px;"
+											style="flex: 0 1 auto; min-width: 50px; margin: 5px;"
 											on:click={() => {
 												fetchNearbyPlaces("医院");
 											}}

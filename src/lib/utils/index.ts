@@ -352,9 +352,14 @@ export const getImportOrigin = (_chats) => {
 };
 
 export const getUserPosition = async (raw = false, reverse = false) => {
+	const options = {
+        timeout: 5000,  // 20 seconds for firefox(chrome can't)
+        // maximumAge: 0,  // 每次都获取最新的位置
+        // enableHighAccuracy: true // 更耗时 耗电
+    };
 	// Get the user's location using the Geolocation API
 	const position = await new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(resolve, reject);
+		navigator.geolocation.getCurrentPosition(resolve, reject, options);
 	}).catch((error) => {
 		console.error('Error getting user location:', error);
 		throw error;
