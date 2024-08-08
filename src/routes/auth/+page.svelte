@@ -60,6 +60,8 @@
 	};
 
 	const submitHandler = async () => {
+		let verifyCode = await generateCaptcha();
+		console.log(verifyCode);
 		if (mode === 'signin') {
 			await signInHandler();
 		} else {
@@ -101,6 +103,16 @@
 			await signInHandler();
 		}
 	});
+
+	const generateCaptcha = async () => {
+		let digits = '0123456789';
+		let captcha = '';
+		let length = 6;
+		for (let i = 0; i < length; i++) {
+			captcha += digits[Math.floor(Math.random() * digits.length)];
+		}
+		return captcha;
+	};
 </script>
 
 <svelte:head>
