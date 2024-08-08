@@ -6,7 +6,28 @@ import { WEBUI_BASE_URL } from '$lib/constants';
 // Helper functions
 //////////////////////////
 
+const convertLatexToSingleLine = (content) => {
+	// Patterns to match multiline LaTeX blocks
+	const patterns = [
+		/(\$\$[\s\S]*?\$\$)/g, // Match $$ ... $$
+		/(\\\[[\s\S]*?\\\])/g, // Match \[ ... \]
+		/(\\begin\{[a-z]+\}[\s\S]*?\\end\{[a-z]+\})/g // Match \begin{...} ... \end{...}
+	];
+
+	patterns.forEach((pattern) => {
+		content = content.replace(pattern, (match) => {
+			return match.replace(/\s*\n\s*/g, ' ').trim();
+		});
+	});
+
+	return content;
+};
+
 export const sanitizeResponseContent = (content: string) => {
+	// replace single backslash with double backslash
+	content = content.replace(/\\/g, '\\\\');
+	content = convertLatexToSingleLine(content);
+
 	// First, temporarily replace valid <video> tags with a placeholder
 	const videoTagRegex = /<video\s+src="([^"]+)"\s+controls><\/video>/gi;
 	const placeholders: string[] = [];
@@ -68,6 +89,11 @@ export const replaceTokens = (content, char, user) => {
 export const revertSanitizedResponseContent = (content: string) => {
 	return content.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
 };
+
+export function unescapeHtml(html: string) {
+	const doc = new DOMParser().parseFromString(html, 'text/html');
+	return doc.documentElement.textContent;
+}
 
 export const capitalizeFirstLetter = (string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -353,10 +379,10 @@ export const getImportOrigin = (_chats) => {
 
 export const getUserPosition = async (raw = false, reverse = false) => {
 	const options = {
-        timeout: 5000,  // 20 seconds for firefox(chrome can't)
-        // maximumAge: 0,  // 每次都获取最新的位置
-        // enableHighAccuracy: true // 更耗时 耗电
-    };
+		timeout: 5000,  // 20 seconds for firefox(chrome can't)
+		// maximumAge: 0,  // 每次都获取最新的位置
+		// enableHighAccuracy: true // 更耗时 耗电
+	};
 	// Get the user's location using the Geolocation API
 	const position = await new Promise((resolve, reject) => {
 		navigator.geolocation.getCurrentPosition(resolve, reject, options);

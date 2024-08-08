@@ -1,10 +1,10 @@
 {
 	"name": "weikang-ai",
-	"version": "0.3.10",
+	"version": "0.3.12",
 	"private": true,
 	"scripts": {
 		"dev": "npm run pyodide:fetch && vite dev --host",
-		"build": "vite build",
+		"build": "npm run pyodide:fetch && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -60,6 +60,7 @@
 		"dayjs": "^1.11.10",
 		"eventsource-parser": "^1.1.2",
 		"file-saver": "^2.0.5",
+		"fuse.js": "^7.0.0",
 		"highlight.js": "^11.9.0",
 		"i18next": "^23.10.0",
 		"i18next-browser-languagedetector": "^7.2.0",

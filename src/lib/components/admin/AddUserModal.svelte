@@ -220,7 +220,7 @@
 										required
 									/>
 								</div>
-							</div>							
+							</div>
 
 							<div class="flex flex-col w-full mt-2">
 								<div class=" mb-1 text-xs text-gray-500">{$i18n.t('Password')}</div>

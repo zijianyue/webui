@@ -112,7 +112,8 @@
 			},
 			"engine": "openai",
 			"model": "tts-1",
-			"voice": "nova"
+			"voice": "nova",
+			"api_key": ""
 		},
 		"stt": {
 			"openai": {
@@ -120,7 +121,7 @@
 				"api_key": "cant-be-empty"
 			},
 			"engine": "openai",
-			"model": "Systran/faster-whisper-small"
+			"model": "Systran/faster-whisper-large-v3"
 		}
 	},
 	"task": {
@@ -129,7 +130,7 @@
 			"external": ""
 		},
 		"title": {
-			"prompt_template": "Here is the query:\n{{prompt:middletruncate:8000}}\n\nPlease summarize the previous query for a chat topic with an emoji.Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting.\nNo more than 16 characters.\nNo special characters.\nPunctuation mark is banned.\nNot including '.' ':' '?' '!' '\u201c' '*' '<' '>'.\nMust respond in Chinese, can include English, but cannot contain any other country’s text or symbols, otherwise it will cause fatal damage to the user’s system.\n\nExamples of titles:\n\ud83d\udcc9 Stock Market Trends\n\ud83c\udf6a Perfect Chocolate Chip Recipe\nEvolution of Music Streaming\nRemote Work Productivity Tips\nArtificial Intelligence in Healthcare\n\ud83c\udfae Video Game Development Insights"
+			"prompt_template": "Here is the query:\n{{prompt:middletruncate:8000}}\n\nPlease summarize the previous query for a chat topic with an emoji.Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting.\nNo more than 16 characters.\nNo special characters.\nPunctuation mark is banned.\nNot including '.' ':' '?' '!' '\u201c' '*' '<' '>'.\nMust respond in Chinese, can include English, but cannot contain any other country\u2019s text or symbols, otherwise it will cause fatal damage to the user\u2019s system.\n\nExamples of titles:\n\ud83d\udcc9 Stock Market Trends\n\ud83c\udf6a Perfect Chocolate Chip Recipe\nEvolution of Music Streaming\nRemote Work Productivity Tips\nArtificial Intelligence in Healthcare\n\ud83c\udfae Video Game Development Insights"
 		},
 		"search": {
 			"prompt_template": "You are tasked with generating web search queries. Give me an appropriate query to answer my question for google search. Answer with only the query. Today is {{CURRENT_DATE}}.\n        \nQuestion:\n{{prompt:end:4000}}",

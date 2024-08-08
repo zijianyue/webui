@@ -286,8 +286,6 @@ async def add_user(form_data: AddUserForm, user=Depends(get_admin_user)):
             status.HTTP_400_BAD_REQUEST, detail=ERROR_MESSAGES.INVALID_EMAIL_FORMAT
         )
 
-    # if Users.get_user_by_email(form_data.email.lower()):
-    #     raise HTTPException(400, detail=ERROR_MESSAGES.EMAIL_TAKEN)    
     if Users.get_user_by_cell_phone(form_data.cell_phone):
         raise HTTPException(400, detail=ERROR_MESSAGES.CELL_PHONE_TAKEN)
 
