@@ -73,7 +73,7 @@
 		"template": "Use the following context as your learned knowledge, inside <context></context> XML tags.\n<context>\n    [context]\n</context>\n\nWhen answer to user:\n- If you don't know, just say that you don't know.\n- If you don't know when you are not sure, ask for clarification.\nAvoid mentioning that you obtained the information from the context.\nAnd answer according to the language of the user's question.\n\nGiven the context information, answer the query.\nQuery: [query]",
 		"top_k": 5,
 		"relevance_threshold": 0.01,
-		"enable_hybrid_search": true,
+		"enable_hybrid_search": false,
 		"reranking_model": "BAAI/bge-reranker-v2-m3",
 		"embedding_engine": "",
 		"embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
@@ -130,7 +130,7 @@
 			"external": ""
 		},
 		"title": {
-			"prompt_template": "Here is the query:\n{{prompt:middletruncate:8000}}\n\nPlease summarize the previous query for a chat topic with an emoji.Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting.\nNo more than 16 characters.\nNo special characters.\nPunctuation mark is banned.\nNot including '.' ':' '?' '!' '\u201c' '*' '<' '>'.\nMust respond in Chinese, can include English, but cannot contain any other country\u2019s text or symbols, otherwise it will cause fatal damage to the user\u2019s system.\n\nExamples of titles:\n\ud83d\udcc9 Stock Market Trends\n\ud83c\udf6a Perfect Chocolate Chip Recipe\nEvolution of Music Streaming\nRemote Work Productivity Tips\nArtificial Intelligence in Healthcare\n\ud83c\udfae Video Game Development Insights"
+			"prompt_template": "Here is the query:\n{{prompt:middletruncate:8000}}\n\nPlease summarize the previous query for a chat topic with an emoji.Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting.\nNo more than 16 characters.\nNo special characters.\nPunctuation mark is banned.\nNot including '.' ':' '?' '!' '\u201c' '*' '<' '>'.\nMust respond in Chinese only.\n\nExamples of titles:\n\ud83d\udcc9 \u80a1\u7968\u5e02\u573a\u8d8b\u52bf\n\ud83c\udf6a \u5b8c\u7f8e\u5de7\u514b\u529b\u66f2\u5947\u98df\u8c31\n\u97f3\u4e50\u6d41\u5a92\u4f53\u7684\u6f14\u53d8\n\u8fdc\u7a0b\u5de5\u4f5c\u751f\u4ea7\u529b\u6280\u5de7\n\u4eba\u5de5\u667a\u80fd\u5728\u533b\u7597\u4e2d\u7684\u5e94\u7528\n\ud83c\udfae \u89c6\u9891\u6e38\u620f\u5f00\u53d1\u89c1\u89e3"
 		},
 		"search": {
 			"prompt_template": "You are tasked with generating web search queries. Give me an appropriate query to answer my question for google search. Answer with only the query. Today is {{CURRENT_DATE}}.\n        \nQuestion:\n{{prompt:end:4000}}",
