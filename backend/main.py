@@ -1520,7 +1520,7 @@ def get_history_prompt_text(messages,
     # TODO: 超过一定token数也应该break
     for m in reversed(messages):
         cnt += 1
-        if (cnt > 4):
+        if (cnt > 6):
             break;
         m_role = m.get("role")
         if m_role == "user":
@@ -1542,7 +1542,7 @@ def get_history_prompt_text(messages,
         else:
             message = f"{role}: {content}"
             string_messages.append(message)
-            log.debug(f"message appended: {message}")
+            # log.debug(f"message appended: {message}")
 
 
     return "\n".join(string_messages)

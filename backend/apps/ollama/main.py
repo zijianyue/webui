@@ -721,11 +721,11 @@ async def generate_chat_completion(
     user=Depends(get_verified_user),
 ):
 
-    log.debug(
-        "form_data.model_dump_json(exclude_none=True).encode(): {0} ".format(
-            form_data.model_dump_json(exclude_none=True).encode()
-        )
-    )
+    # log.debug(
+    #     "form_data.model_dump_json(exclude_none=True).encode(): {0} ".format(
+    #         form_data.model_dump_json(exclude_none=True).encode()
+    #     )
+    # )
 
     payload = {
         **form_data.model_dump(exclude_none=True, exclude=["metadata"]),
